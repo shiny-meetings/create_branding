@@ -1,204 +1,358 @@
 library(shiny)
 library(bslib)
-library(ggplot2)
-library(dplyr)
-library(DT)
-library(thematic)
-library(ragg)
+library(yaml)
+# library(shinyjs)
+# library(shinyWidgets)
+library(colourpicker)
 
-options(shiny.useragg = TRUE)
-thematic_shiny(font = "auto")
-
-# UI
-ui <- page_fluid(
-  title = "MTCars Dashboard",
-  theme = bs_theme(),
-
-  # Header with value boxes
-  layout_columns(
-    value_box(
-      title = "Total Cars",
-      value = textOutput("total_cars"),
-      showcase = bsicons::bs_icon("car-front")
-    ),
-    value_box(
-      title = "Avg MPG",
-      value = textOutput("avg_mpg"),
-      showcase = bsicons::bs_icon("speedometer")
-    ),
-    value_box(
-      title = "Avg HP",
-      value = textOutput("avg_hp"),
-      showcase = bsicons::bs_icon("lightning")
-    ),
-    value_box(
-      title = "Max HP",
-      value = textOutput("max_hp"),
-      showcase = bsicons::bs_icon("trophy")
-    )
-  ),
-
-  # Controls in a card
-  card(
-    card_header("Filters"),
-    layout_columns(
-      card_body(
-        selectInput("cylinder", "Cylinders:",
-                    choices = c("All", sort(unique(mtcars$cyl))),
-                    selected = "All")
+# Define the UI
+ui <- page_sidebar(
+  title = "Brand.yml Editor",
+  sidebar = sidebar(
+    width = 350,
+    accordion(
+      accordion_panel(
+        "Meta Information",
+        textInput("meta_name_short", "Short Name", ""),
+        textInput("meta_name_full", "Full Name", ""),
+        textInput("meta_link_home", "Home URL", ""),
+        textInput("meta_link_github", "GitHub URL", ""),
+        textInput("meta_link_linkedin", "LinkedIn URL", "")
       ),
-      card_body(
-        sliderInput("hp_range", "Horsepower Range:",
-                    min = min(mtcars$hp), max = max(mtcars$hp),
-                    value = c(min(mtcars$hp), max(mtcars$hp)))
+
+      accordion_panel(
+        "Logo",
+        textInput("logo_small", "Small Logo Path", ""),
+        textInput("logo_medium_light", "Medium Logo (Light) Path", ""),
+        textInput("logo_medium_dark", "Medium Logo (Dark) Path", ""),
+        textInput("logo_large", "Large Logo Path", "")
       ),
-      card_body(
-        checkboxGroupInput("transmission", "Transmission:",
-                           choices = c("Automatic" = 0, "Manual" = 1),
-                           selected = c(0, 1))
+
+      accordion_panel(
+        "Color Palette",
+        tags$div(
+          id = "color_palette_container",
+          actionButton("add_color", "Add Color", class = "btn-sm"),
+          tags$div(
+            id = "color_palette_inputs",
+            tags$div(
+              class = "d-flex mb-2",
+              textInput("color_palette_name_1", NULL, "", placeholder = "Color name"),
+              colourInput("color_palette_value_1", NULL, "#FFFFFF", returnName = TRUE)
+            ),
+            tags$div(
+              class = "d-flex mb-2",
+              textInput("color_palette_name_2", NULL, "", placeholder = "Color name"),
+              colourInput("color_palette_value_2", NULL, "#000000", returnName = TRUE)
+            )
+          )
+        )
       ),
-      card_body(
-        radioButtons("carb", "Carburetors:",
-                     choices = c("All", sort(unique(mtcars$carb))),
-                     selected = "All")
+
+      accordion_panel(
+        "Theme Colors",
+        colourInput("color_foreground", "Foreground", "#151515", returnName = TRUE),
+        colourInput("color_background", "Background", "#FFFFFF", returnName = TRUE),
+        colourInput("color_primary", "Primary", "#447099", returnName = TRUE),
+        colourInput("color_secondary", "Secondary", NULL, returnName = TRUE),
+        colourInput("color_success", "Success", NULL, returnName = TRUE),
+        colourInput("color_info", "Info", NULL, returnName = TRUE),
+        colourInput("color_warning", "Warning", NULL, returnName = TRUE),
+        colourInput("color_danger", "Danger", NULL, returnName = TRUE)
+      ),
+
+      accordion_panel(
+        "Typography",
+        tags$div(
+          id = "fonts_container",
+          actionButton("add_font", "Add Font", class = "btn-sm"),
+          tags$div(
+            id = "font_inputs",
+            tags$div(
+              class = "font-entry mb-3 p-2 border rounded",
+              textInput("font_family_1", "Font Family", ""),
+              selectInput("font_source_1", "Font Source",
+                          choices = c("google", "bunny", "file", "system")),
+              textInput("font_weight_1", "Font Weights (comma separated)", "400,700"),
+              textInput("font_style_1", "Font Styles (comma separated)", "normal,italic")
+            )
+          )
+        ),
+
+        tags$hr(),
+
+        tags$h5("Base Typography"),
+        textInput("typography_base_family", "Base Font Family", ""),
+        textInput("typography_base_weight", "Base Font Weight", "400"),
+        textInput("typography_base_size", "Base Font Size", "16px"),
+        textInput("typography_base_line_height", "Base Line Height", "1.5"),
+
+        tags$h5("Headings Typography"),
+        textInput("typography_headings_family", "Headings Font Family", ""),
+        textInput("typography_headings_weight", "Headings Font Weight", "600"),
+        textInput("typography_headings_style", "Headings Font Style", "normal"),
+        colourInput("typography_headings_color", "Headings Color", NULL, returnName = TRUE),
+
+        tags$h5("Monospace Typography"),
+        textInput("typography_monospace_family", "Monospace Font Family", ""),
+        textInput("typography_monospace_weight", "Monospace Font Weight", "400"),
+        textInput("typography_monospace_size", "Monospace Font Size", "0.9em")
       )
     )
   ),
 
-  # First row with 2 plots
   layout_columns(
     card(
-      card_header("Scatter Plot: MPG vs HP"),
-      card_body(plotOutput("scatter_plot"))
-    ),
-    card(
-      card_header("Bar Chart: Average MPG by Cylinder"),
-      card_body(plotOutput("bar_plot"))
+      full_screen = TRUE,
+      card_header("_brand.yml Preview"),
+      card_body(
+        verbatimTextOutput("yaml_output", placeholder = TRUE)
+      ),
+      card_footer(
+        downloadButton("download_yaml", "Download _brand.yml")
+      )
     )
-  ),
+  )#,
 
-  # Second row with 2 plots
-  layout_columns(
-    card(
-      card_header("Box Plot: MPG by Cylinder"),
-      card_body(plotOutput("box_plot"))
-    ),
-    card(
-      card_header("Density Plot: HP Distribution"),
-      card_body(plotOutput("density_plot"))
-    )
-  ),
-
-  # Table
-  card(
-    card_header("Car Data Table"),
-    card_body(DTOutput("car_table"))
-  )
+  # useShinyjs()
 )
 
-# Server
+# Define the server
 server <- function(input, output, session) {
 
-  # Reactive dataset based on inputs
-  filtered_data <- reactive({
-    data <- mtcars
+  # Reactive to store color palette entries
+  color_palette_count <- reactiveVal(2)
 
-    # Add car names as a column
-    data$car_name <- rownames(mtcars)
+  # Reactive to store font entries
+  font_count <- reactiveVal(1)
 
-    # Filter by cylinders
-    if (input$cylinder != "All") {
-      data <- data %>% filter(cyl == as.numeric(input$cylinder))
+  # Add new color to the palette
+  observeEvent(input$add_color, {
+    current_count <- color_palette_count()
+    new_count <- current_count + 1
+
+    insertUI(
+      selector = "#color_palette_inputs",
+      where = "beforeEnd",
+      ui = tags$div(
+        class = "d-flex mb-2",
+        textInput(paste0("color_palette_name_", new_count), NULL, "", placeholder = "Color name"),
+        colourInput(paste0("color_palette_value_", new_count), NULL, "#CCCCCC", returnName = TRUE)
+      )
+    )
+
+    color_palette_count(new_count)
+  })
+
+  # Add new font entry
+  observeEvent(input$add_font, {
+    current_count <- font_count()
+    new_count <- current_count + 1
+
+    insertUI(
+      selector = "#font_inputs",
+      where = "beforeEnd",
+      ui = tags$div(
+        class = "font-entry mb-3 p-2 border rounded",
+        textInput(paste0("font_family_", new_count), "Font Family", ""),
+        selectInput(paste0("font_source_", new_count), "Font Source",
+                    choices = c("google", "bunny", "file", "system")),
+        textInput(paste0("font_weight_", new_count), "Font Weights (comma separated)", "400,700"),
+        textInput(paste0("font_style_", new_count), "Font Styles (comma separated)", "normal,italic")
+      )
+    )
+
+    font_count(new_count)
+  })
+
+  # Generate the YAML output based on user inputs
+  output$yaml_output <- renderText({
+    # Build the YAML structure
+    brand_yml <- list()
+
+    # Meta section
+    if (input$meta_name_short != "" || input$meta_name_full != "") {
+      brand_yml$meta <- list()
+
+      if (input$meta_name_short != "" && input$meta_name_full != "") {
+        brand_yml$meta$name <- list(
+          short = input$meta_name_short,
+          full = input$meta_name_full
+        )
+      } else if (input$meta_name_short != "") {
+        brand_yml$meta$name <- input$meta_name_short
+      }
+
+      # Handle links
+      link_fields <- c(
+        home = input$meta_link_home,
+        github = input$meta_link_github,
+        linkedin = input$meta_link_linkedin
+      )
+
+      non_empty_links <- link_fields[link_fields != ""]
+
+      if (length(non_empty_links) > 0) {
+        if (length(non_empty_links) == 1 && !is.null(non_empty_links$home) && non_empty_links$home != "") {
+          brand_yml$meta$link <- non_empty_links$home
+        } else {
+          brand_yml$meta$link <- as.list(non_empty_links)
+        }
+      }
     }
 
-    # Filter by HP range
-    data <- data %>% filter(hp >= input$hp_range[1] & hp <= input$hp_range[2])
+    # Logo section
+    if (input$logo_small != "" || input$logo_medium_light != "" ||
+        input$logo_medium_dark != "" || input$logo_large != "") {
+      brand_yml$logo <- list()
 
-    # Filter by transmission
-    if (length(input$transmission) < 2) {
-      data <- data %>% filter(am %in% as.numeric(input$transmission))
+      if (input$logo_small != "") {
+        brand_yml$logo$small <- input$logo_small
+      }
+
+      if (input$logo_medium_light != "" || input$logo_medium_dark != "") {
+        brand_yml$logo$medium <- list()
+        if (input$logo_medium_light != "") brand_yml$logo$medium$light <- input$logo_medium_light
+        if (input$logo_medium_dark != "") brand_yml$logo$medium$dark <- input$logo_medium_dark
+      }
+
+      if (input$logo_large != "") {
+        brand_yml$logo$large <- input$logo_large
+      }
     }
 
-    # Filter by carburetors
-    if (input$carb != "All") {
-      data <- data %>% filter(carb == as.numeric(input$carb))
+    # Color palette
+    color_palette <- list()
+    for (i in 1:color_palette_count()) {
+      name_input <- input[[paste0("color_palette_name_", i)]]
+      value_input <- input[[paste0("color_palette_value_", i)]]
+
+      if (!is.null(name_input) && name_input != "" && !is.null(value_input)) {
+        color_palette[[name_input]] <- value_input
+      }
     }
 
-    data
+    # Theme colors
+    color_theme <- list()
+    theme_colors <- c(
+      "foreground", "background", "primary", "secondary",
+      "success", "info", "warning", "danger"
+    )
+
+    for (color in theme_colors) {
+      color_value <- input[[paste0("color_", color)]]
+      if (!is.null(color_value) && color_value != "") {
+        color_theme[[color]] <- color_value
+      }
+    }
+
+    # Combine color palette and theme
+    if (length(color_palette) > 0 || length(color_theme) > 0) {
+      brand_yml$color <- list()
+      if (length(color_palette) > 0) {
+        brand_yml$color$palette <- color_palette
+      }
+
+      for (name in names(color_theme)) {
+        brand_yml$color[[name]] <- color_theme[[name]]
+      }
+    }
+
+    # Typography section
+    typography <- list()
+
+    # Fonts
+    fonts <- list()
+    for (i in 1:font_count()) {
+      family <- input[[paste0("font_family_", i)]]
+      source <- input[[paste0("font_source_", i)]]
+      weights <- input[[paste0("font_weight_", i)]]
+      styles <- input[[paste0("font_style_", i)]]
+
+      if (!is.null(family) && family != "") {
+        font_entry <- list(
+          family = family,
+          source = source
+        )
+
+        if (!is.null(weights) && weights != "") {
+          weight_list <- strsplit(weights, ",")[[1]]
+          weight_list <- trimws(weight_list)
+          if (length(weight_list) > 0) {
+            # Convert numeric weights to numeric type
+            numeric_weights <- suppressWarnings(as.numeric(weight_list))
+            if (all(!is.na(numeric_weights))) {
+              font_entry$weight <- numeric_weights
+            } else {
+              font_entry$weight <- weight_list
+            }
+          }
+        }
+
+        if (!is.null(styles) && styles != "") {
+          style_list <- strsplit(styles, ",")[[1]]
+          style_list <- trimws(style_list)
+          if (length(style_list) > 0) {
+            font_entry$style <- style_list
+          }
+        }
+
+        fonts[[i]] <- font_entry
+      }
+    }
+
+    # Base typography
+    base <- list()
+    if (input$typography_base_family != "") base$family <- input$typography_base_family
+    if (input$typography_base_weight != "") base$weight <- as.numeric(input$typography_base_weight)
+    if (input$typography_base_size != "") base$size <- input$typography_base_size
+    if (input$typography_base_line_height != "") base$`line-height` <- as.numeric(input$typography_base_line_height)
+
+    # Headings typography
+    headings <- list()
+    if (input$typography_headings_family != "") headings$family <- input$typography_headings_family
+    if (input$typography_headings_weight != "") headings$weight <- as.numeric(input$typography_headings_weight)
+    if (input$typography_headings_style != "") headings$style <- input$typography_headings_style
+    if (!is.null(input$typography_headings_color) && input$typography_headings_color != "") {
+      headings$color <- input$typography_headings_color
+    }
+
+    # Monospace typography
+    monospace <- list()
+    if (input$typography_monospace_family != "") monospace$family <- input$typography_monospace_family
+    if (input$typography_monospace_weight != "") monospace$weight <- as.numeric(input$typography_monospace_weight)
+    if (input$typography_monospace_size != "") monospace$size <- input$typography_monospace_size
+
+    # Combine typography
+    if (length(fonts) > 0) typography$fonts <- fonts
+    if (length(base) > 0) typography$base <- base
+    if (length(headings) > 0) typography$headings <- headings
+    if (length(monospace) > 0) typography$monospace <- monospace
+
+    if (length(typography) > 0) {
+      brand_yml$typography <- typography
+    }
+
+    # Convert to YAML
+    if (length(brand_yml) > 0) {
+      yaml_content <- as.yaml(brand_yml, indent.mapping.sequence = TRUE)
+      return(yaml_content)
+    } else {
+      return("# Your _brand.yml will appear here as you fill in the form")
+    }
   })
 
-  # Value box outputs
-  output$total_cars <- renderText({
-    nrow(filtered_data())
-  })
-
-  output$avg_mpg <- renderText({
-    round(mean(filtered_data()$mpg), 1)
-  })
-
-  output$avg_hp <- renderText({
-    round(mean(filtered_data()$hp), 1)
-  })
-
-  output$max_hp <- renderText({
-    max(filtered_data()$hp)
-  })
-
-  # Scatter Plot (geom_point)
-  output$scatter_plot <- renderPlot({
-    ggplot(filtered_data(), aes(x = hp, y = mpg, color = factor(cyl))) +
-      geom_point(size = 3, alpha = 0.7) +
-      labs(x = "Horsepower", y = "Miles Per Gallon", color = "Cylinders") +
-      # theme_minimal() +
-      theme(legend.position = "bottom")
-  })
-
-  # Bar Plot (geom_col)
-  output$bar_plot <- renderPlot({
-    avg_mpg_by_cyl <- filtered_data() %>%
-      group_by(cyl) %>%
-      summarize(avg_mpg = mean(mpg))
-
-    ggplot(avg_mpg_by_cyl, aes(x = factor(cyl), y = avg_mpg, fill = factor(cyl))) +
-      geom_col() +
-      labs(x = "Cylinders", y = "Average MPG", fill = "Cylinders") +
-      # theme_minimal() +
-      theme(legend.position = "none")
-  })
-
-  # Box Plot (geom_boxplot)
-  output$box_plot <- renderPlot({
-    ggplot(filtered_data(), aes(x = factor(cyl), y = mpg, fill = factor(cyl))) +
-      geom_boxplot() +
-      labs(x = "Cylinders", y = "Miles Per Gallon", fill = "Cylinders") +
-      # theme_minimal() +
-      theme(legend.position = "none")
-  })
-
-  # Density Plot (geom_density)
-  output$density_plot <- renderPlot({
-    ggplot(filtered_data(), aes(x = hp, fill = factor(am))) +
-      geom_density(alpha = 0.5) +
-      labs(x = "Horsepower", y = "Density", fill = "Transmission") +
-      scale_fill_discrete(labels = c("Automatic", "Manual")) +
-      # theme_minimal() +
-      theme(legend.position = "bottom")
-  })
-
-  # Data table
-  output$car_table <- renderDT({
-    filtered_data() %>%
-      select(car_name, mpg, cyl, hp, wt, qsec, am) %>%
-      rename("Car" = car_name,
-             "MPG" = mpg,
-             "Cylinders" = cyl,
-             "Horsepower" = hp,
-             "Weight" = wt,
-             "1/4 Mile Time" = qsec,
-             "Transmission" = am) %>%
-      mutate(Transmission = ifelse(Transmission == 0, "Automatic", "Manual"))
-  })
+  # Download the YAML file
+  output$download_yaml <- downloadHandler(
+    filename = function() {
+      "_brand.yml"
+    },
+    content = function(file) {
+      yaml_content <- as.yaml(yaml.load(input$yaml_output), indent.mapping.sequence = TRUE)
+      writeLines(yaml_content, file)
+    }
+  )
 }
 
 # Run the app
-shinyApp(ui = ui, server = server)
+shinyApp(ui, server)
