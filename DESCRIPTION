@@ -1,0 +1,26 @@
+Package: createBranding
+Title: Use LLM to generate _brand.yml and ggplot2 goodies for your brand
+Version: 0.0.0.9000
+Authors@R: 
+    person("Shiny", "Meetings", , "umairdurrani@outlook.com", role = c("aut", "cre"))
+Description: Generate _brand.yml and ggplot2 scales & theme by providing
+    company branding guidelines (text and images).
+License: MIT + file LICENSE
+Imports: 
+    bslib,
+    config,
+    ellmer,
+    golem,
+    shiny,
+    shinyAce,
+    shinychat
+Suggests: 
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 2.10)

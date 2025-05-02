@@ -30,32 +30,6 @@ How to use LLMs in the app? Some possibilities:
   with no limits. Other models have generous limits.  
 - Ask the user for their key.
 
-## Deliverables
-
-**Start date: 2025-03-05**  
-**End date: 2025-04-02**
-
-- Day 1 and 2:
-  - [ ] Initial wireframing. You may use AI tools such as
-    [tldraw](https://www.tldraw.com/), [shiny
-    assistant](https://gallery.shinyapps.io/assistant/#) or [ploomber AI
-    editor](https://editor.ploomber.io/)
-  - Framework to use:
-    - [ ] shiny only
-    - [ ] [golem](https://github.com/ThinkR-open/golem)
-    - [ ] [rhino](https://github.com/Appsilon/rhino)
-    - [ ] shiny + [ambiorix](https://ambiorix.dev/)
-- Day 3:
-  - [ ] First meeting for discussing UI and features  
-- Day 10:
-  - [ ] Second meeting for discussing <features>  
-- Day 17:
-  - [ ] Third meeting for discussing <features>  
-- Day 24:
-  - [ ] Final meeting for discussing <features> and deployment
-- Day 29 or before:
-  - [ ] Deployment
-
 ## Meetings
 
 Projects start on Wednesdays with meetings on Fridays. We have a shiny

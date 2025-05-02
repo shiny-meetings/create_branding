@@ -15,21 +15,15 @@ A specific instance of a brand's data is stored in a file named
 
 -   `logo` - Files or links to the brand's logo at various sizes.
 
--   `color` Semantic colors, e.g. `primary`, `secondary`, `success`,
+-   `color` Semantic colors, e.g. `primary`, `secondary`, `success`,
     `warning`, etc. Named colors in the brand's color palette are stored
     in `color.palette`.
 
 -   `typography` - Font family, weight, style, color, and line height
-    for key elements, e.g. base, headings and monospace text. Available
+    for key elements, e.g. base, headings and monospace text. Available
     fonts used by the brand are stored in `typography.fonts` and can be
     sourced from Google Fonts, Bunny Fonts or local or remote font
     files.
-
--   `defaults` - Additional context-specific settings beyond the basic
-    brand colors and typography. These could be options, for example,
-    that are used by Bootstrap in Quarto or Shiny. They could also be
-    folded into existing Quarto yaml fields like `format` or `website`,
-    or they could be new fields for other contexts like `shiny`.
 
 ## Example file
 
@@ -171,23 +165,6 @@ typography:
     color: "#0066cc"  # Optional color for link, defaults `color.primary`. ALT: named colors from `color` or `color.palette`
     background-color: transparent  # Optional background color for links, ALT: named colors from `color` or `color.palette`
     decoration: underline  # Optional text decoration for links
-
-defaults: # Additional Bootstrap, Shiny, or Quarto rules, all optional and only to be used as a last resort
-  bootstrap: Additional scss rules for any contexts that use Bootstrap
-    functions: # string with scss function declarations
-    defaults: # Mapping of Bootstrap variables to default values
-    mixins: # string with scss mixins
-    rules: # string with scss rules
-  quarto:
-    format:
-      # Options specific to output Quarto output formats
-  shiny:
-    theme: # Additional scss rules to add to the Shiny branded theme
-      defaults:
-        # Named bootstrap variables and their default values
-        navbar-bg: $brand-orange # Use Sass variables to access brand colors: $brand-{color_name}
-      rules:
-        # A string of additional scss rules
 ```
 
 ## Brand best practices
@@ -208,5 +185,5 @@ Be careful and be certain to follow these rules when creating the
 
 -   Prefer hex color syntax for raw color values.
 
-Provide the YAML file directly in a markdown block. Include any
-follow-up instructions in the YAML as inline comments.
+Provide the YAML file directly in a markdown block.
+
