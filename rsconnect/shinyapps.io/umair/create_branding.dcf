@@ -1,0 +1,12 @@
+name: create_branding
+title: create_branding
+username: umair
+account: umair
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14667610
+bundleId: 10216540
+url: https://umair.shinyapps.io/create_branding/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

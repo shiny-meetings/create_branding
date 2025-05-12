@@ -8,3 +8,6 @@ $run_dev.*
 ^LICENSE\.md$
 ^README\.Rmd$
 
+^app\.R$
+^rsconnect$
+^\.rscignore$

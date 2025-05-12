@@ -11,6 +11,7 @@ Imports:
     config,
     ellmer,
     golem,
+    pkgload,
     shiny,
     shinyAce,
     shinychat
