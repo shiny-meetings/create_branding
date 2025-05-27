@@ -29,6 +29,9 @@ golem::add_module(name = "create_brand_yml", with_test = FALSE) # Name of the mo
 
 golem::add_module(name = "create_functions", with_test = FALSE)
 
+usethis::use_package("yaml")
+usethis::use_package("ggplot2")
+golem::add_module(name = "create_scales", with_test = FALSE)
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*

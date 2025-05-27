@@ -10,11 +10,13 @@ Imports:
     bslib,
     config,
     ellmer,
+    ggplot2,
     golem,
     pkgload,
     shiny,
     shinyAce,
-    shinychat
+    shinychat,
+    yaml
 Suggests: 
     spelling,
     testthat (>= 3.0.0)

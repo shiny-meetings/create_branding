@@ -10,13 +10,20 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
-    page_fillable(
+    page_navbar(
       theme = bs_theme(),
-      h4("Use LLM to Create _brand.yml and ggplot scales & theme for your brand"),
-      # _brand.yml generation
-      mod_create_brand_yml_ui("create_brand_yml"),
-      br(),
-      mod_create_functions_ui("create_functions")
+      header = useBusyIndicators(),
+      nav_panel(
+        title = "brand_yml",
+        h4("Use LLM to Create _brand.yml and ggplot scales & theme for your brand"),
+        # _brand.yml generation
+        mod_create_brand_yml_ui("create_brand_yml")
+      ),
+      # mod_create_functions_ui("create_functions")
+      nav_panel(
+        title = "ggplot scales",
+        mod_create_scales_ui("create_scales_1")
+      )
     )
   )
 }

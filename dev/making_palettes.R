@@ -4,74 +4,65 @@ library(yaml)
 
 brand_yml_content <- 'meta:
   name:
-    short: Walmart
-    full: Walmart Inc.
+    short: Home Depot
+    full: The Home Depot, Inc.
   link:
-    home: https://www.walmart.com/
+    home: https://www.homedepot.com/
 
 logo:
   images:
-    header: logos/walmart-logo.png
-  small: logos/walmart-icon.png
-  medium: header
-  large: header
+    full: logos/homedepot-logo.svg
+  small: logos/homedepot-icon.svg
+  medium:
+    light: full
+    dark: full
+  large: full
 
 color:
   palette:
     white: "#FFFFFF"
-    walmart-blue: "#0071DC"
-    walmart-yellow: "#FFC200"
-    walmart-red: "#DE1C24"
-    dark-blue: "#041E42"
-    light-yellow: "#F8E6A5"
-    light-blue: "#8CD1FC"
-    lighter-blue: "#D3EFF8"
-    light-gray: "#FAFAFA"
-  foreground: "#041E42"
-  background: "#FFFFFF"
-  primary: "#0071DC"
-  secondary: "#041E42"
-  tertiary: "#D3EFF8"
-  success: "#72994E"
-  info: "#8CD1FC"
-  warning: "#FFC200"
-  danger: "#DE1C24"
-  light: "#FFFFFF"
-  dark: "#041E42"
+    black: "#000000"
+    orange: "#F96302"
+    gray-dark: "#747474"
+    gray-medium: "#C4C4C4"
+    gray-light: "#F5F5F5"
+  foreground: black
+  background: white
+  primary: orange
+  secondary: gray-dark
+  tertiary: gray-medium
+  light: white
+  dark: black
 
 typography:
   fonts:
-    - family: Arial
-      source: system
-    - family: Helvetica
-      source: system
+    - family: Helvetica Neue LT Pro
+      source: file
+      files:
+        - path: fonts/helvetica-neue-lt-pro/HelveticaNeueLTPro-BdCn.otf
+          weight: 700
+          style: normal
+    - family: Helvetica Neue LT Pro
+      source: file
+      files:
+        - path: fonts/helvetica-neue-lt-pro/HelveticaNeueLTPro-Roman.otf
+          weight: 400
+          style: normal
+
   base:
-    family: Arial
+    family: Helvetica Neue LT Pro
     weight: 400
-    size: 16px
-    line-height: 1.5
+    size: 14px
+    line-height: 1.4
   headings:
-    family: Helvetica
-    weight: 600
+    family: Helvetica Neue LT Pro
+    weight: 700
     style: normal
     line-height: 1.2
-    color: "#041E42"
   monospace:
     family: monospace
     weight: 400
-    size: 0.9em
-  monospace-inline:
-    color: "#7d12ba"
-    background-color: "#f8f9fa"
-  monospace-block:
-    color: foreground
-    background-color: background
-    line-height: 1.4
-  link:
-    weight: 600
-    color: "#0066cc"
-    background-color: transparent
-    decoration: underline'
+    size: 0.9em'
 
 
 
@@ -101,8 +92,12 @@ diverging_scales <- "Diverging (also called bipolar or double-ended) color scale
 brand_yml <- yaml::yaml.load(brand_yml_content)
 
 colors_list <- function(brand_yml){
-  brand_yml$color$palette <- NULL
-  brand_yml$color
+  palette_colors <- brand_yml$color$palette
+  brand_colors <- brand_yml$color
+  brand_colors$palette <- NULL
+  lapply(brand_colors, \(x){
+    if (grepl("#", x)) x else palette_colors[[x]]
+  })
 }
 
 colors_list <- colors_list(brand_yml)
