@@ -198,3 +198,102 @@ theme_brand <- function(colors,
       ...
     )
 }
+
+
+
+
+
+
+bar_plot_code <- '
+# bar_data <- mtcars |>
+#   count(cyl) |>
+#   mutate(cyl = as.factor(cyl))
+
+bar_plot <- ggplot(bar_data, aes(x = cyl, y = n, fill = cyl)) +
+  geom_bar(stat = "identity")
+
+bar_plot +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  labs(title = \'scale_fill_brand(palette = "qual")\',
+       subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+box_plot_code <- '
+box_plot <- ggplot(ToothGrowth, aes(x = as.factor(dose), y = len, fill = as.factor(dose))) +
+  geom_boxplot()
+
+box_plot +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  labs(title = \'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+heat1_plot_code <- '
+heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
+  geom_tile()
+
+heat_map +
+  scale_fill_brand(palette = "seq1", brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+heat2_plot_code <- '
+heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
+  geom_tile()
+
+heat_map +
+  scale_fill_brand(palette = "seq2", brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "seq2")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+heat3_plot_code <- '
+heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
+  geom_tile()
+
+heat_map +
+  scale_fill_brand(palette = "seq3", brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+heat4_plot_code <- '
+cor_mtcars <- cor(mtcars)
+cor_data <- as.data.frame(as.table(cor_mtcars))
+names(cor_data) <- c("Var1", "Var2", "Correlation")
+
+diverging_heatmap <- ggplot(cor_data, aes(x = Var1, y = Var2, fill = Correlation)) +
+  geom_tile(color = "white", size = 0.5)
+
+diverging_heatmap +
+  scale_fill_brand(palette = "div", limits = c(-1, 1), brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "div")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+density_plot_code <- '
+density_plot <- ggplot(mtcars, aes(x = qsec, fill = as.factor(gear))) +
+  geom_density(alpha = 0.7)
+
+density_plot +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+hist_plot_code <- '
+facet_hist <- ggplot(ggplot2::mpg, aes(x = hwy, fill = class)) +
+  geom_histogram(binwidth = 2) +
+  facet_wrap(~class, scales = "free_y")
+
+facet_hist +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  labs(title =\'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'

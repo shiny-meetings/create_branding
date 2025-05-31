@@ -12,7 +12,6 @@ Imports:
     ellmer,
     ggplot2,
     golem,
-    pkgload,
     shiny,
     shinyAce,
     shinychat,

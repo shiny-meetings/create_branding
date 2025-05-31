@@ -35,7 +35,8 @@ mod_create_brand_yml_ui <- function(id) {
                 fontSize = 14,
                 wordWrap = TRUE,
                 showPrintMargin = FALSE,
-                highlightActiveLine = TRUE)
+                highlightActiveLine = TRUE),
+      input_task_button(ns("brand_btn"), "I like it, take me to ggplot2 goodies")
     )
   )
 }
@@ -93,8 +94,15 @@ mod_create_brand_yml_server <- function(id){
       updateAceEditor(session, "brand_editor", value = cleaned_brand_code)
     })
 
+    brand_and_btn <- reactiveValues()
+
+    observeEvent(input$brand_btn, {
+      brand_and_btn$brand_editor <- input$brand_editor
+      brand_and_btn$brand_btn <- input$brand_btn
+    })
+
     # Return the final value of _brand.yml
-    return(reactive(input$brand_editor))
+    return(brand_and_btn)
   })
 }
 

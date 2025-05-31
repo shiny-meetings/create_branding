@@ -11,6 +11,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     page_navbar(
+      id = "page",
       theme = bs_theme(),
       header = useBusyIndicators(),
       nav_panel(

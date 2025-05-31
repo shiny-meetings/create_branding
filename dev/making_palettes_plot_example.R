@@ -111,7 +111,10 @@ scatter_plot + scale_color_brand(palette = "seq1") + labs(title ='scale_fill_bra
 box_plot <- ggplot(ToothGrowth, aes(x = as.factor(dose), y = len, fill = as.factor(dose))) +
   geom_boxplot()
 
-box_plot + scale_fill_brand(palette = "qual") + labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') + theme_brand()
+box_plot +
+  scale_fill_brand(palette = "qual") +
+  labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') +
+  theme_brand()
 
 
 
@@ -131,7 +134,10 @@ heat_map + scale_fill_brand(palette = "seq3") + labs(title ='scale_fill_brand(pa
 density_plot <- ggplot(mtcars, aes(x = qsec, fill = as.factor(gear))) +
   geom_density(alpha = 0.7)
 
-density_plot + scale_fill_brand(palette = "qual") + labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') + theme_brand()
+density_plot +
+  scale_fill_brand(palette = "qual") +
+  labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') +
+  theme_brand()
 
 
 
@@ -140,20 +146,25 @@ facet_hist <- ggplot(mpg, aes(x = hwy, fill = class)) +
   geom_histogram(binwidth = 2) +
   facet_wrap(~class, scales = "free_y")
 
-facet_hist + scale_fill_brand(palette = "qual") + labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') + theme_brand()
+facet_hist +
+  scale_fill_brand(palette = "qual") +
+  labs(title ='scale_fill_brand(palette = "qual")', subtitle = 'theme_brand()') +
+  theme_brand()
 
 
 
 
-cor_mtcars <- cor(mtcars)
-cor_data <- as.data.frame(as.table(cor_mtcars))
-names(cor_data) <- c("Var1", "Var2", "Correlation")
+# cor_mtcars <- cor(mtcars)
+# cor_data <- as.data.frame(as.table(cor_mtcars))
+# names(cor_data) <- c("Var1", "Var2", "Correlation")
 
-# Create heatmap with custom diverging palette
 diverging_heatmap <- ggplot(cor_data, aes(x = Var1, y = Var2, fill = Correlation)) +
   geom_tile(color = "white", size = 0.5)
 
-diverging_heatmap + scale_fill_brand(palette = "div", limits = c(-1, 1)) + labs(title ='scale_fill_brand(palette = "div")', subtitle = 'theme_brand()') + theme_brand()
+diverging_heatmap +
+  scale_fill_brand(palette = "div", limits = c(-1, 1)) +
+  labs(title ='scale_fill_brand(palette = "div")', subtitle = 'theme_brand()') +
+  theme_brand()
 
 
 
