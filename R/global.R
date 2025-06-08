@@ -300,7 +300,7 @@ facet_hist +
 
 s1_plot_code <- '
 scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
-  geom_point()
+  geom_point(size = 4)
 
 scatter_plot +
   scale_color_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
@@ -310,22 +310,22 @@ scatter_plot +
 
 s2_plot_code <- '
 scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
-  geom_point()
+  geom_point(size = 4)
 
 scatter_plot +
-  scale_color_brand(palette = "seq3", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
+  scale_color_brand(palette = "seq2", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "seq2")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 
 
 s3_plot_code <- '
 scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
-  geom_point()
+  geom_point(size = 4)
 
 scatter_plot +
-  scale_color_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
+  scale_color_brand(palette = "seq3", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 
