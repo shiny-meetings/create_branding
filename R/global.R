@@ -298,6 +298,49 @@ facet_hist +
   theme_brand(colors = colors_list())
 '
 
+s1_plot_code <- '
+scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
+  geom_point()
+
+scatter_plot +
+  scale_color_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+s2_plot_code <- '
+scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
+  geom_point()
+
+scatter_plot +
+  scale_color_brand(palette = "seq3", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+s3_plot_code <- '
+scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Petal.Length)) +
+  geom_point()
+
+scatter_plot +
+  scale_color_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
+s4_plot_code <- '
+scatter_diverging <- ggplot(mtcars, aes(x = wt, y = mpg, color = disp)) +
+  geom_point(size = 4, alpha = 0.8)
+
+scatter_diverging +
+  scale_color_brand(palette = "div", brand_palettes = palettes_from_llm_edited()) +
+  labs(title =\'scale_fill_brand(palette = "div")\', subtitle = \'theme_brand()\') +
+  theme_brand(colors = colors_list())
+'
+
+
 # Helper function to pretty format a list with indentation
 format_list <- function(lst, indent = 0) {
   # Start with list opening

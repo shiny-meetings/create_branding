@@ -30,7 +30,45 @@ mod_create_scales_ui <- function(id) {
                           highlightActiveLine = TRUE),
                 input_task_button(ns("update_palettes"), "Update Palettes"),
                 uiOutput(ns("palettes_card"))),
-      nav_panel(title = "Scales",
+      nav_panel(
+        title = "Color Scale",
+        card(
+          card_header("scale_color_brand"),
+          navset_card_tab(
+            nav_panel(
+              title = "Scatter Plot",
+              card(
+                card_header("Sequential 1"),
+                aceEditor(ns("s1_code"), value = s1_plot_code, mode = "r", theme = "github",
+                          height = "200px", readOnly = TRUE),
+                plotOutput(ns("s1_plot"), height = "600px")
+              ),
+              br(),
+              card(
+                card_header("Sequential 2"),
+                aceEditor(ns("s2_code"), value = s2_plot_code, mode = "r", theme = "github",
+                          height = "200px", readOnly = TRUE),
+                plotOutput(ns("s2_plot"), height = "600px")
+              ),
+              br(),
+              card(
+                card_header("Sequential 3"),
+                aceEditor(ns("s3_code"), value = s3_plot_code, mode = "r", theme = "github",
+                          height = "200px", readOnly = TRUE),
+                plotOutput(ns("s3_plot"), height = "600px")
+              ),
+              br(),
+              card(
+                card_header("Diverging"),
+                aceEditor(ns("s4_code"), value = s4_plot_code, mode = "r", theme = "github",
+                          height = "200px", readOnly = TRUE),
+                plotOutput(ns("s4_plot"), height = "600px")
+              )
+            )
+          )
+        )
+      ),
+      nav_panel(title = "Fill Scale",
                 card(
                   card_header("scale_fill_brand"),
                   navset_card_tab(
@@ -104,7 +142,7 @@ mod_create_scales_ui <- function(id) {
 #' create_scales Server Functions
 #'
 #' @noRd
-mod_create_scales_server <- function(id, brand_yml_and_btn){
+mod_create_scales_server <- function(id, brand_yml_and_btn, api_key){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
@@ -124,12 +162,15 @@ mod_create_scales_server <- function(id, brand_yml_and_btn){
     })
 
     # Chat object
-    chat <- chat_google_gemini(system_prompt = system_prompt_palettes)
+    chat <- reactive({
+      chat_google_gemini(system_prompt = system_prompt_palettes,
+                               api_key = api_key())
+    })
 
     # Get complete palettes from LLM
     palettes_from_llm <- reactive({
         req(colors_list())
-        chat$chat_structured(
+        chat()$chat_structured(
         paste("Semantic colors:", paste(names(colors_list()), colors_list(), sep = "=", collapse = ", ")),
         type = palette_type
       )
@@ -206,6 +247,29 @@ mod_create_scales_server <- function(id, brand_yml_and_btn){
     output$hist_plot <- renderPlot({
       req(palettes_from_llm_edited(), colors_list())
       eval(parse(text = hist_plot_code))
+    })
+
+
+    output$s1_plot <- renderPlot({
+      req(palettes_from_llm_edited(), colors_list())
+      eval(parse(text = s1_plot_code))
+    })
+
+
+    output$s2_plot <- renderPlot({
+      req(palettes_from_llm_edited(), colors_list())
+      eval(parse(text = s2_plot_code))
+    })
+
+    output$s3_plot <- renderPlot({
+      req(palettes_from_llm_edited(), colors_list())
+      eval(parse(text = s3_plot_code))
+    })
+
+
+    output$s4_plot <- renderPlot({
+      req(palettes_from_llm_edited(), colors_list())
+      eval(parse(text = s4_plot_code))
     })
 
 

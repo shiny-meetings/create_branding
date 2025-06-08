@@ -44,11 +44,14 @@ mod_create_brand_yml_ui <- function(id) {
 #' create_brand_yml Server Functions
 #'
 #' @noRd
-mod_create_brand_yml_server <- function(id){
+mod_create_brand_yml_server <- function(id, api_key){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     # Create chat object for Google Gemini with specified system prompt
-    chat <- chat_google_gemini(system_prompt = sys_prompt())
+    chat <- reactive({
+      chat_google_gemini(system_prompt = sys_prompt(),
+                               api_key = api_key())
+    })
 
     # Initialize a flag to check if images are sent
     images_sent <- reactiveVal(FALSE)
@@ -71,11 +74,11 @@ mod_create_brand_yml_server <- function(id){
     observeEvent(input$chat_user_input, {
       ## If images are uploaded, attach them with the chat
       if (!images_sent() && !is.null(image_contents())) {
-        response_promise <- do.call(chat$chat_async, c(list(input$chat_user_input), image_contents()))
+        response_promise <- do.call(chat()$chat_async, c(list(input$chat_user_input), image_contents()))
         images_sent(TRUE)
       } else {
         ## Otherwise just chat without images
-        response_promise <- chat$chat_async(input$chat_user_input)
+        response_promise <- chat()$chat_async(input$chat_user_input)
       }
 
       ## Since `chat_async` is used, `then` is used so that `response` is utilized when available

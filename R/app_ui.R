@@ -17,6 +17,9 @@ app_ui <- function(request) {
       nav_panel(
         title = "brand_yml",
         h4("Use LLM to Create _brand.yml and ggplot scales & theme for your brand"),
+        textInput("api_key", "Enter your Google Gemini API Key (skip if set in .Renviron):",
+                  placeholder = "Your API key will not be stored permanently"),
+        tags$a(href="https://aistudio.google.com/app/apikey", "Create a Gemini API key here."),
         # _brand.yml generation
         mod_create_brand_yml_ui("create_brand_yml")
       ),

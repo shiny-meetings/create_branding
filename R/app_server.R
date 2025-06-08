@@ -5,8 +5,17 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
+  # api key
+  api_key <- reactive({
+    if (Sys.getenv("GOOGLE_API_KEY") != ""){
+      Sys.getenv("GOOGLE_API_KEY")
+    } else {
+      input$api_key
+    }
+  })
+
   # _brand_yml generation
-  brand_yml_and_btn <- mod_create_brand_yml_server("create_brand_yml")
+  brand_yml_and_btn <- mod_create_brand_yml_server("create_brand_yml", api_key)
   # observe(cat(brand_yml()))
 
   # create functions
@@ -16,5 +25,5 @@ app_server <- function(input, output, session) {
     bslib::nav_select(id = "page", selected = "ggplot scales")
   })
 
-  mod_create_scales_server("create_scales_1", brand_yml_and_btn)
+  mod_create_scales_server("create_scales_1", brand_yml_and_btn, api_key)
 }
