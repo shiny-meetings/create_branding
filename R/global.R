@@ -1,9 +1,9 @@
-qualitative_scales <- "Hues are what a five year old would understand under “different colors”: red, yellow, blue, etc. They’re perfect to distinguish between categories that don’t have an intrinsic order, like countries or ethnicities, genders or industries – that’s why these qualitative color scales are sometimes called unordered color scales. In such a color scale, colors say “I’m not worth more or less than these other colors here!”. Give your hues different lightnesses so that they’d work in greyscale, too. It makes them look better and easier to distinguish, which is especially important for colorblind readers."
+qualitative_scales <- "Hues are what a five year old would understand under 'different colors': red, yellow, blue, etc. They are perfect to distinguish between categories that do not have an intrinsic order, like countries or ethnicities, genders or industries - that is why these qualitative color scales are sometimes called unordered color scales. In such a color scale, colors say 'I am not worth more or less than these other colors here!'. Give your hues different lightnesses so that they would work in greyscale, too. It makes them look better and easier to distinguish, which is especially important for colorblind readers."
 
 
-sequential_scales <- "Sequential color scales are gradients that go from bright to dark or the other way round. They’re great for visualizing numbers that go from low to high, like income, temperature, or age. A medium blue on a white background, for example, lets your readers know: “My value is a bit higher than the light blue and a bit lower than the dark blue. Gradients can be classed (=split into brackets, also called classified, stepped, quantized, graduated, binned or discrete) or unclassed (=one continuous gradient). Using two or even more hues increases the color contrast between segments of your gradient, making it easier for readers to distinguish between them. To decide which data values correspond to which color in your gradient is called “interpolation” and has a massive influence on how readers perceive your values."
+sequential_scales <- "Sequential color scales are gradients that go from bright to dark or the other way round. They are great for visualizing numbers that go from low to high, like income, temperature, or age. A medium blue on a white background, for example, lets your readers know: 'My value is a bit higher than the light blue and a bit lower than the dark blue. Gradients can be classed (=split into brackets, also called classified, stepped, quantized, graduated, binned or discrete) or unclassed (=one continuous gradient). Using two or even more hues increases the color contrast between segments of your gradient, making it easier for readers to distinguish between them. To decide which data values correspond to which color in your gradient is called 'interpolation' and has a massive influence on how readers perceive your values."
 
-diverging_scales <- "Diverging (also called bipolar or double-ended) color scales are the same as sequential color scales – but instead of just going from low to high, they have a bright middle value and then go darker to both ends of the scale in different hues. Diverging color scales are often used to visualize negative and positive values, election results, or Likert scales (“strongly agree, agree, neutral, disagree, strongly disagree”). Like sequential color scales, diverging ones can be classed or unclassed."
+diverging_scales <- "Diverging (also called bipolar or double-ended) color scales are the same as sequential color scales - but instead of just going from low to high, they have a bright middle value and then go darker to both ends of the scale in different hues. Diverging color scales are often used to visualize negative and positive values, election results, or Likert scales ('strongly agree, agree, neutral, disagree, strongly disagree'). Like sequential color scales, diverging ones can be classed or unclassed."
 
 
 system_prompt_palettes <- paste0("You are an expert in making color palettes for data visualization that are good for all users including colorblind users. You are also an expert in bootstrap semantic colors. Use the provided semantic colors and information about different types of color scales below and create 1 qualitative (at least 8 colors), 3 sequential (no #FFFFFF), and 1 diverging color palettes for ggplot2. You are free to use other colors (IF NEEDED) along with the provided semantic colors. Remember that the provided semantic colors are based on company branding so they are the most important. No color must repeat within the same color palette. Return only a list of color palettes without assigning names to individual colors and without any comments.", "\n", "\nColor scales: ", qualitative_scales, " ", sequential_scales, " ", diverging_scales)
@@ -213,7 +213,7 @@ bar_plot <- ggplot(bar_data, aes(x = cyl, y = n, fill = cyl)) +
   geom_bar(stat = "identity")
 
 bar_plot +
-  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm_edited()) +
   labs(title = \'scale_fill_brand(palette = "qual")\',
        subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
@@ -225,7 +225,7 @@ box_plot <- ggplot(ToothGrowth, aes(x = as.factor(dose), y = len, fill = as.fact
   geom_boxplot()
 
 box_plot +
-  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm_edited()) +
   labs(title = \'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -235,7 +235,7 @@ heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
   geom_tile()
 
 heat_map +
-  scale_fill_brand(palette = "seq1", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -246,7 +246,7 @@ heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
   geom_tile()
 
 heat_map +
-  scale_fill_brand(palette = "seq2", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "seq2", brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "seq2")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -257,7 +257,7 @@ heat_map <- ggplot(arrests_data, aes(x = Crime, y = State, fill = Rate)) +
   geom_tile()
 
 heat_map +
-  scale_fill_brand(palette = "seq3", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "seq3", brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -271,7 +271,7 @@ diverging_heatmap <- ggplot(cor_data, aes(x = Var1, y = Var2, fill = Correlation
   geom_tile(color = "white", size = 0.5)
 
 diverging_heatmap +
-  scale_fill_brand(palette = "div", limits = c(-1, 1), brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "div", limits = c(-1, 1), brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "div")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -282,7 +282,7 @@ density_plot <- ggplot(mtcars, aes(x = qsec, fill = as.factor(gear))) +
   geom_density(alpha = 0.7)
 
 density_plot +
-  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
@@ -293,7 +293,74 @@ facet_hist <- ggplot(ggplot2::mpg, aes(x = hwy, fill = class)) +
   facet_wrap(~class, scales = "free_y")
 
 facet_hist +
-  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm()) +
+  scale_fill_brand(palette = "qual", brand_palettes = palettes_from_llm_edited()) +
   labs(title =\'scale_fill_brand(palette = "qual")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
+
+# Helper function to pretty format a list with indentation
+format_list <- function(lst, indent = 0) {
+  # Start with list opening
+  result <- "list(\n"
+  indent <- indent + 2
+  spaces <- paste(rep(" ", indent), collapse = "")
+
+  # Process each element
+  elements <- names(lst)
+  for (i in seq_along(elements)) {
+    name <- elements[i]
+    value <- lst[[name]]
+
+    # Add the element name
+    result <- paste0(result, spaces, name, " = ")
+
+    # Format based on the type of the value
+    if (is.list(value) && !is.data.frame(value)) {
+      # Recursively format nested lists
+      result <- paste0(result, format_list(value, indent))
+    } else if (is.data.frame(value)) {
+      # Format data frames in a readable way
+      df_str <- "data.frame(\n"
+      df_indent <- paste(rep(" ", indent + 2), collapse = "")
+
+      for (col in names(value)) {
+        col_values <- paste(as.character(value[[col]]), collapse = ", ")
+        if (is.character(value[[col]])) {
+          col_values <- gsub("([^,]+)", "'\\1'", col_values)
+        }
+        df_str <- paste0(df_str, df_indent, col, " = c(", col_values, ")")
+        if (col != utils::tail(names(value), 1)) {
+          df_str <- paste0(df_str, ",")
+        }
+        df_str <- paste0(df_str, "\n")
+      }
+
+      df_str <- paste0(df_str, spaces, ")")
+      result <- paste0(result, df_str)
+    } else if (is.character(value)) {
+      # Add quotes for character vectors
+      char_values <- paste0("'", value, "'", collapse = ", ")
+      result <- paste0(result, "c(", char_values, ")")
+    } else if (length(value) > 1) {
+      # Format atomic vectors
+      vec_values <- paste(value, collapse = ", ")
+      result <- paste0(result, "c(", vec_values, ")")
+    } else {
+      # Single values
+      result <- paste0(result, value)
+    }
+
+    # Add comma if not the last element
+    if (i < length(elements)) {
+      result <- paste0(result, ",\n")
+    } else {
+      result <- paste0(result, "\n")
+    }
+  }
+
+  # Close the list
+  spaces <- paste(rep(" ", indent - 2), collapse = "")
+  result <- paste0(result, spaces, ")")
+
+  return(result)
+}
