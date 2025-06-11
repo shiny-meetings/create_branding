@@ -304,7 +304,7 @@ scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Peta
 
 scatter_plot +
   scale_color_brand(palette = "seq1", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
+  labs(title =\'scale_color_brand(palette = "seq1")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 
@@ -314,7 +314,7 @@ scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Peta
 
 scatter_plot +
   scale_color_brand(palette = "seq2", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "seq2")\', subtitle = \'theme_brand()\') +
+  labs(title =\'scale_color_brand(palette = "seq2")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 
@@ -325,7 +325,7 @@ scatter_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Peta
 
 scatter_plot +
   scale_color_brand(palette = "seq3", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
+  labs(title =\'scale_color_brand(palette = "seq3")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 
@@ -336,7 +336,7 @@ scatter_diverging <- ggplot(mtcars, aes(x = wt, y = mpg, color = disp)) +
 
 scatter_diverging +
   scale_color_brand(palette = "div", brand_palettes = palettes_from_llm_edited()) +
-  labs(title =\'scale_fill_brand(palette = "div")\', subtitle = \'theme_brand()\') +
+  labs(title =\'scale_color_brand(palette = "div")\', subtitle = \'theme_brand()\') +
   theme_brand(colors = colors_list())
 '
 

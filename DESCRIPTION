@@ -12,6 +12,7 @@ Imports:
     ellmer,
     ggplot2,
     golem,
+    magick,
     shiny,
     shinyAce,
     shinychat,
